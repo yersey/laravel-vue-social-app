@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\Like;
 use App\Models\Post;
 use App\Models\Comment;
@@ -32,22 +33,22 @@ class PostService
         $post->delete();
     }
 
-    function like(Post $post): Like
+    function like(Post $post, User $user): Like
     {
-        if ($post->likes()->where('user_id', auth()->id())->exists()) {
+        if ($post->likes()->where('user_id', $user->id)->exists()) {
             throw new PostAlreadyLikedException();
         }
 
         $like = $post->likes()->create([
-            'user_id' => auth()->id()
+            'user_id' => $user->id
         ]);
         
         return $like;
     }
 
-    function unlike(Post $post): void
+    function unlike(Post $post, User $user): void
     {
-        $like = $post->likes()->where('user_id', auth()->id())->first();
+        $like = $post->likes()->where('user_id', $user->id)->first();
 
         if (!$like) {
             throw new LikeNotFoundException();

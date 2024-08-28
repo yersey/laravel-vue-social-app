@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UpdateUserRequest;
@@ -22,9 +23,9 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    public function me(): UserResource
+    public function me(Request $request): UserResource
     {
-        $user = auth()->user();
+        $user = $request->user();
 
         return UserResource::make($user);
     }
@@ -36,7 +37,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user): UserResource
     {
-        if ($user->id !== auth()->id())  {
+        if ($user->id !== $request->user()->id)  {
             return response(null, 403);
         }
 

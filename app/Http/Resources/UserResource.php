@@ -22,11 +22,11 @@ class UserResource extends JsonResource
             'date_of_birth' => $this->date_of_birth,
             'created_at' => $this->created_at,
             'avatar' => $this->avatar_path ? Storage::url($this->avatar_path) : null,
-            'is_friend' => $this->when(auth()->user() && $this->friendsLoaded(), function () {
-                return $this->isFriendWith(auth()->user());
+            'is_friend' => $this->when($request->user() && $this->friendsLoaded(), function () use ($request) {
+                return $this->isFriendWith($request->user());
             }),
-            'friend_request' => $this->when(auth()->user() && $this->friendRequestRelationsLoaded(), function () {
-                if ($friendRequest = $this->getFriendRequestWith(auth()->user())) {
+            'friend_request' => $this->when($request->user() && $this->friendRequestRelationsLoaded(), function () use ($request) {
+                if ($friendRequest = $this->getFriendRequestWith($request->user())) {
                     return [
                         'id' => $friendRequest->id,
                         'sender_id' => $friendRequest->sender_id,

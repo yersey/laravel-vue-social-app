@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Comment;
+use Illuminate\Http\Request;
 use App\Services\CommentService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -17,10 +18,10 @@ class CommentLikeController extends Controller
         protected CommentService $service
     ) {}
     
-    public function store(Comment $comment): JsonResponse
+    public function store(Request $request, Comment $comment): JsonResponse
     {
         try {
-            $like = $this->service->like($comment);
+            $like = $this->service->like($comment, $request->user());
         } catch (CommentAlreadyLikedException $e) {
             return response()
                 ->json(['message' => $e->getMessage()])
@@ -32,10 +33,10 @@ class CommentLikeController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function destroy(Comment $comment): JsonResponse
+    public function destroy(Request $request, Comment $comment): JsonResponse
     {
         try {
-            $this->service->unlike($comment);
+            $this->service->unlike($comment, $request->user());
         } catch (LikeNotFoundException $e) {
             return response()
                 ->json(['message' => $e->getMessage()])

@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Auth\AuthManager;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        protected AuthManager $auth
+    ) {}
+
     public function register(RegisterRequest $request)
     {
         $user = User::create($request->safe()->only(['name', 'email', 'password']));
@@ -19,19 +24,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        if (!auth()->attempt($request->only(['email', 'password']))) {
+        if (!$this->auth->attempt($request->only(['email', 'password']))) {
             return response()->json(['error' => 'Bad credentials'], 401);
         }
 
-        auth()->user()->tokens()->delete();
-        $token = auth()->user()->createToken('token')->plainTextToken;
+        $request->user()->tokens()->delete();
+        $token = $request->user()->createToken('token')->plainTextToken;
 
         return response()->json(['token' => $token], 200);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        auth()->user()->currentAccessToken()->delete();
+        $request->user()->tokens()->delete();
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }

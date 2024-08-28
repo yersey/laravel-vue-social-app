@@ -42,8 +42,12 @@ class Post extends Model
         return $this->morphMany(Like::class, 'likeable');
     }
 
-    public function isLikedByLoggedInUser()
+    public function isLikedByLoggedInUser(?User $user): bool
     {
-        return $this->likes->contains('user_id', auth()->id() ?? 0);
+        if (!$user) {
+            return false;
+        }
+
+        return $this->likes->contains('user_id', $user->id);
     }
 }

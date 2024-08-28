@@ -23,7 +23,7 @@ class PostResource extends JsonResource
             'created_at' => $this->created_at,
             'comments' => CommentResource::collection($this->comments),
             'likes_count' => $this->likes->count(),
-            'is_liked' => $this->isLikedByLoggedInUser()
+            'is_liked' => $this->isLikedByLoggedInUser($request->user())
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Post;
+use Illuminate\Http\Request;
 use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -17,10 +18,10 @@ class PostLikeController extends Controller
         protected PostService $service
     ) {}
 
-    public function store(Post $post): JsonResponse
+    public function store(Request $request, Post $post): JsonResponse
     {
         try {
-            $like = $this->service->like($post);
+            $like = $this->service->like($post, $request->user());
         } catch (PostAlreadyLikedException $e) {
             return response()
                 ->json(['message' => $e->getMessage()])
@@ -32,10 +33,10 @@ class PostLikeController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function destroy(Post $post): JsonResponse
+    public function destroy(Request $request, Post $post): JsonResponse
     {
         try {
-            $this->service->unlike($post);
+            $this->service->unlike($post, $request->user());
         } catch (LikeNotFoundException $e) {
             return response()
                 ->json(['message' => $e->getMessage()])

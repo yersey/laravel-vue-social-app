@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Models\FriendRequest;
 use App\Services\FriendService;
 use Illuminate\Http\JsonResponse;
@@ -20,10 +21,10 @@ class OutgoingFriendRequestController extends Controller
         protected FriendService $service
     ) {}
     
-    function store(User $user): JsonResponse
+    function store(Request $request, User $receiver): JsonResponse
     {
         try {
-            $friendRequest = $this->service->sendFriendRequest($user);
+            $friendRequest = $this->service->sendFriendRequest($receiver, $request->user());
         } catch (SelfFriendRequestException $e) {
             return response()
                 ->json(['message' => $e->getMessage()])
@@ -43,7 +44,7 @@ class OutgoingFriendRequestController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    function destroy(User $user, FriendRequest $friendRequest): JsonResponse
+    function destroy(User $receiver, FriendRequest $friendRequest): JsonResponse
     {
         Gate::authorize('cancel-friend-request', $friendRequest);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
 use App\Models\FriendRequest;
 use App\Services\FriendService;
 use Illuminate\Http\JsonResponse;
@@ -17,18 +18,18 @@ class IncomingFriendRequestController extends Controller
         protected FriendService $service
     ) {}
 
-    public function index(): ResourceCollection
+    public function index(Request $request): ResourceCollection
     {
-        $friendRequests = auth()->user()->receivedFriendRequests;
+        $friendRequests = $request->user()->receivedFriendRequests;
 
         return FriendRequestResource::collection($friendRequests);
     }
 
-    public function update(FriendRequest $friendRequest): JsonResponse
+    public function update(Request $request, FriendRequest $friendRequest): JsonResponse
     {
         Gate::authorize('respond-friend-request', $friendRequest);
 
-        $this->service->acceptFriendRequest($friendRequest);
+        $this->service->acceptFriendRequest($friendRequest, $request->user());
 
         return response()
             ->json()

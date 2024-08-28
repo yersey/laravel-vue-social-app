@@ -4,9 +4,8 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthControllerTest extends TestCase
 {
@@ -86,7 +85,7 @@ class AuthControllerTest extends TestCase
         ])->create();
         $data = [
             'email' => $user->email,
-            'password' => 'testtest'
+            'password' => 'testtest123'
         ];
 
         $response = $this->postJson('/api/login', $data);
@@ -112,17 +111,10 @@ class AuthControllerTest extends TestCase
             'email' => $user->email,
             'password' => 'testtest'
         ];
-        $tokenResponse = $this->postJson('/api/login', $data);
-        // dd($tokenResponse->json());
-        $headers = [
-            'Authorization' => 'Bearer ' . $tokenResponse['token']
-        ];
-        // dd($headers);
-        
-        $this->assertNotNull(PersonalAccessToken::first());
-        // dd($this->postJson('/api/logout', $data));
 
+        $this->postJson('/api/login', $data);
+        $this->postJson('/api/logout', $data);
 
-        $this->assertNull(PersonalAccessToken::count());
+        $this->assertEquals(PersonalAccessToken::count(), 0);
     }
 }

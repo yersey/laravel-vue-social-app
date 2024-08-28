@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Services\FriendService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\UserResource;
@@ -22,10 +23,10 @@ class FriendController extends Controller
         return UserResource::collection($user->friends);
     }
 
-    function destroy(User $user, User $friend): JsonResponse
+    function destroy(Request $request, User $user, User $friend): JsonResponse
     {
         try {
-            $this->service->unfriend($friend);
+            $this->service->unfriend($friend, $request->user());
         } catch (FriendNotFoundException $e) {
             return response()
                 ->json(['message' => $e->getMessage()])

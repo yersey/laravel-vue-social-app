@@ -31,7 +31,7 @@ class PostLikeControllerTest extends TestCase
 
         $response = $this->postJson('/api/posts/' . $post->id . '/likes');
 
-        $response->assertStatus(400)
+        $response->assertStatus(409)
             ->assertJson(['error' => 'You have already liked this post']);
     }
 

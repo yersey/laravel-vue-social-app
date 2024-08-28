@@ -5,10 +5,10 @@ namespace App\Models;
 use App\Models\Like;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
@@ -48,9 +48,13 @@ class Comment extends Model
         return $this->morphMany(Like::class, 'likeable');
     }
 
-    public function isLikedByLoggedInUser(): bool
+    public function isLikedByLoggedInUser(?User $user): bool
     {
-        return $this->likes->contains('user_id', auth()->id() ?? 0);
+        if (!$user) {
+            return false;
+        }
+
+        return $this->likes->contains('user_id', $user->id);
     }
     
     public function isCommentReply(): bool

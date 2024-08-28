@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Like;
+use App\Models\User;
 use App\Models\Comment;
 use App\DataTransferObjects\CommentDto;
 use App\Exceptions\LikeNotFoundException;
@@ -28,22 +29,22 @@ class CommentService
         $comment->delete();
     }
 
-    function like(Comment $comment): Like
+    function like(Comment $comment, User $user): Like
     {
-        if ($comment->likes()->where('user_id', auth()->id())->exists()) {
+        if ($comment->likes()->where('user_id', $user->id)->exists()) {
             throw new CommentAlreadyLikedException();
         }
 
         $like = $comment->likes()->create([
-            'user_id' => auth()->id()
+            'user_id' => $user->id
         ]);
         
         return $like;
     }
 
-    function unlike(Comment $comment): void
+    function unlike(Comment $comment, User $user): void
     {
-        $like = $comment->likes()->where('user_id', auth()->id())->first();
+        $like = $comment->likes()->where('user_id', $user->id)->first();
 
         if (!$like) {
             throw new LikeNotFoundException();

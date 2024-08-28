@@ -15,7 +15,7 @@ readonly class PostDto
     {
         return new self(
             content: $request->safe()->content,
-            userId: auth()->id()
+            userId: $request->user()->id
         );
     }
 }

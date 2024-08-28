@@ -11,19 +11,19 @@ use App\Exceptions\FriendRequestAlreadyExistsException;
 
 class FriendService
 {
-    public function unfriend(User $friend): void
+    public function unfriend(User $friend, User $user): void
     {
-        if (!$friend->isFriendWith(auth()->user())) {
+        if (!$friend->isFriendWith($user)) {
             throw new FriendNotFoundException();
         }
 
-        auth()->user()->requestedFriendships()->detach($friend->id);
-        auth()->user()->acceptedFriendships()->detach($friend->id);
+        $user->requestedFriendships()->detach($friend->id);
+        $user->acceptedFriendships()->detach($friend->id);
     }
 
-    function acceptFriendRequest(FriendRequest $friendRequest): void
+    function acceptFriendRequest(FriendRequest $friendRequest, User $user): void
     {
-        auth()->user()->acceptedFriendships()->attach($friendRequest->sender_id);
+        $user->acceptedFriendships()->attach($friendRequest->sender_id);
         $friendRequest->delete();
     }
 
@@ -32,35 +32,35 @@ class FriendService
         $friendRequest->delete();
     }
 
-    public function sendFriendRequest($user): FriendRequest
+    public function sendFriendRequest(User $receiver, User $user): FriendRequest
     {
-        if ($user->id === auth()->id()) {
+        if ($receiver->id === $user->id) {
             throw new SelfFriendRequestException();
         }
 
-        if ($user->isFriendWith(auth()->user())) {
+        if ($receiver->isFriendWith($user)) {
             throw new FriendshipAlreadyExistsException();
         }
 
-        $sentFriendRequest = auth()->user()
+        $sentFriendRequest = $user
             ->sentFriendRequests()
-            ->where('receiver_id', $user->id)
+            ->where('receiver_id', $receiver->id)
             ->exists();
         if ($sentFriendRequest) {
             throw new FriendRequestAlreadyExistsException();
         }
 
-        $receivedFriendRequest = auth()->user()
+        $receivedFriendRequest = $user
             ->receivedFriendRequests()
-            ->where('sender_id', $user->id)
+            ->where('sender_id', $receiver->id)
             ->exists();
         if ($receivedFriendRequest) {
             throw new FriendRequestAlreadyExistsException();
         }
 
         $friendRequest = FriendRequest::create([
-            'sender_id' => auth()->id(),
-            'receiver_id' => $user->id,
+            'sender_id' => $user->id,
+            'receiver_id' => $receiver->id,
         ]);
 
         return $friendRequest;
