@@ -9,7 +9,7 @@ export default {
     methods: {
         async addPost() {
             await axios
-                .post("/api/posts", { content: this.newPostBody })
+                .post("/api/v1/posts", { content: this.newPostBody })
                 .then((response) => {
                     this.newPostBody = "";
                     this.$emit("postAdded", response.data.data);

@@ -12,7 +12,7 @@ export default {
         async unfriend() {
             await axios
                 .delete(
-                    `/api/users/${this.userStore.user.id}/friends/${this.friend.id}`
+                    `/api/v1/users/${this.userStore.user.id}/friends/${this.friend.id}`
                 )
                 .then((response) => {
                     this.$emit("unfriended", this.friend);

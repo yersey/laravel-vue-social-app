@@ -15,7 +15,7 @@ export default {
             formData.append("image", this.image);
 
             await axios
-                .post("/api/images", formData)
+                .post("/api/v1/images", formData)
                 .then((response) => {
                     this.$emit("imageUploaded", response.data.data);
                     this.$refs.uploadedImage.src = response.data.data.url;

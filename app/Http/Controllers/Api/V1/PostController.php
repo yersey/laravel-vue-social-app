@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Post;
 use App\Services\PostService;
@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PostRequest;
 use App\DataTransferObjects\PostDto;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PostResource;
+use App\Http\Resources\V1\PostResource;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Resources\Json\ResourceCollection;

@@ -15,7 +15,7 @@ class ExampleTest extends TestCase
     // test_<WhatIsBeingTested>_<ExpectedBehavior>.
     public function test_the_application_returns_a_successful_response(): void
     {
-        $response = $this->getJson('/api/posts');
+        $response = $this->getJson('/api/v1/posts');
         
         // $response->assertJson([]);
         // $response->assertExactJson([]);

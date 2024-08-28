@@ -5,7 +5,7 @@ export default {
     methods: {
         async acceptFriendRequest() {
             await axios
-                .patch(`/api/friend-requests/${this.friendRequest.id}`)
+                .patch(`/api/v1/friend-requests/${this.friendRequest.id}`)
                 .then((response) => {
                     this.$emit("accepted", this.friendRequest);
                 })
@@ -15,7 +15,7 @@ export default {
         },
         async declineFriendRequest() {
             await axios
-                .delete(`/api/friend-requests/${this.friendRequest.id}`)
+                .delete(`/api/v1/friend-requests/${this.friendRequest.id}`)
                 .then((response) => {
                     this.$emit("declined", this.friendRequest);
                 })

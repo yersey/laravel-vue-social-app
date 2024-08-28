@@ -19,7 +19,7 @@ class AuthControllerTest extends TestCase
             'password' => fake()->password(),
         ];
 
-        $response = $this->postJson('/api/register', $data);
+        $response = $this->postJson('/api/v1/register', $data);
 
         $response->assertStatus(201)
             ->assertJsonStructure([
@@ -39,7 +39,7 @@ class AuthControllerTest extends TestCase
             'password' => fake()->password(),
         ];
 
-        $response = $this->postJson('/api/register', $data);
+        $response = $this->postJson('/api/v1/register', $data);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrorFor('email');
@@ -55,7 +55,7 @@ class AuthControllerTest extends TestCase
             'password' => 'testtest'
         ];
 
-        $response = $this->postJson('/api/login', $data);
+        $response = $this->postJson('/api/v1/login', $data);
 
         $response->assertStatus(200)
             ->assertJsonStructure(['token']);
@@ -71,9 +71,9 @@ class AuthControllerTest extends TestCase
             'password' => 'testtest'
         ];
 
-        $this->postJson('/api/login', $data);
+        $this->postJson('/api/v1/login', $data);
         $token = PersonalAccessToken::first();
-        $this->postJson('/api/login', $data);
+        $this->postJson('/api/v1/login', $data);
 
         $this->assertModelMissing($token);
     }
@@ -88,15 +88,15 @@ class AuthControllerTest extends TestCase
             'password' => 'testtest123'
         ];
 
-        $response = $this->postJson('/api/login', $data);
+        $response = $this->postJson('/api/v1/login', $data);
 
         $response->assertStatus(401)
-            ->assertJson(['error' => 'Bad credentials']);
+            ->assertJson(['message' => 'Bad credentials']);
     }
 
     public function test_user_user_logout_throws_authentication_error(): void
     {
-        $response = $this->postJson('/api/logout');
+        $response = $this->postJson('/api/v1/logout');
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
@@ -112,8 +112,8 @@ class AuthControllerTest extends TestCase
             'password' => 'testtest'
         ];
 
-        $this->postJson('/api/login', $data);
-        $this->postJson('/api/logout', $data);
+        $this->postJson('/api/v1/login', $data);
+        $this->postJson('/api/v1/logout', $data);
 
         $this->assertEquals(PersonalAccessToken::count(), 0);
     }

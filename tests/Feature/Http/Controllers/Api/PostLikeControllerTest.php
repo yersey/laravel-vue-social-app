@@ -17,7 +17,7 @@ class PostLikeControllerTest extends TestCase
         $post = Post::factory()->create();
         $this->actingAs(User::factory()->create());
 
-        $response = $this->postJson('/api/posts/' . $post->id . '/likes');
+        $response = $this->postJson('/api/v1/posts/' . $post->id . '/likes');
 
         $response->assertStatus(201);
     }
@@ -29,17 +29,17 @@ class PostLikeControllerTest extends TestCase
         Like::factory()->for($user)->for($post, 'likeable')->create();
         $this->actingAs($user);
 
-        $response = $this->postJson('/api/posts/' . $post->id . '/likes');
+        $response = $this->postJson('/api/v1/posts/' . $post->id . '/likes');
 
         $response->assertStatus(409)
-            ->assertJson(['error' => 'You have already liked this post']);
+            ->assertJson(['message' => 'You have already liked this post.']);
     }
 
     public function test_like_store_throws_authentication_error(): void
     {
         $post = Post::factory()->create();
 
-        $response = $this->postJson('/api/posts/' . $post->id . '/likes');
+        $response = $this->postJson('/api/v1/posts/' . $post->id . '/likes');
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
@@ -52,7 +52,7 @@ class PostLikeControllerTest extends TestCase
         Like::factory()->for($user)->for($post, 'likeable')->create();
         $this->actingAs($user);
 
-        $response = $this->deleteJson('/api/posts/' . $post->id . '/likes');
+        $response = $this->deleteJson('/api/v1/posts/' . $post->id . '/likes');
 
         $response->assertStatus(204);
     }
@@ -62,7 +62,7 @@ class PostLikeControllerTest extends TestCase
         $post = Post::factory()->create();
         Like::factory()->for(User::factory())->for($post, 'likeable')->create();
 
-        $response = $this->deleteJson('/api/posts/' . $post->id . '/likes');
+        $response = $this->deleteJson('/api/v1/posts/' . $post->id . '/likes');
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
@@ -74,9 +74,9 @@ class PostLikeControllerTest extends TestCase
         Like::factory()->for(User::factory())->for($post, 'likeable')->create();
         $this->actingAs(User::factory()->create());
 
-        $response = $this->deleteJson('/api/posts/' . $post->id . '/likes');
+        $response = $this->deleteJson('/api/v1/posts/' . $post->id . '/likes');
 
         $response->assertStatus(404)
-            ->assertJson(['error' => 'Like not found']);
+            ->assertJson(['message' => 'Like not found.']);
     }
 }

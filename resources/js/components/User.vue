@@ -10,7 +10,7 @@ export default {
     methods: {
         async sendFriendRequest() {
             await axios
-                .post(`/api/users/${this.user.id}/friend-requests`)
+                .post(`/api/v1/users/${this.user.id}/friend-requests`)
                 .then((response) => {
                     this.user.friend_request = {
                         id: response.data.data.id,
@@ -24,7 +24,7 @@ export default {
         async cancelFriendRequest() {
             await axios
                 .delete(
-                    `/api/users/${this.user.id}/friend-requests/${this.user.friend_request.id}`
+                    `/api/v1/users/${this.user.id}/friend-requests/${this.user.friend_request.id}`
                 )
                 .then((response) => {
                     this.user.friend_request = null;

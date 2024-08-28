@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\AuthManager;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\V1\UserResource;
 use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
@@ -25,7 +25,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         if (!$this->auth->attempt($request->only(['email', 'password']))) {
-            return response()->json(['error' => 'Bad credentials'], 401);
+            return response()->json(['message' => 'Bad credentials'], 401);
         }
 
         $request->user()->tokens()->delete();

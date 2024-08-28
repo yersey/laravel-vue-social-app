@@ -16,7 +16,7 @@ export default {
     methods: {
         async fetchFriendRequests() {
             await axios
-                .get("/api/friend-requests")
+                .get("/api/v1/friend-requests")
                 .then((response) => {
                     this.friendRequests = response.data.data;
                 })

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use App\Services\FriendService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\FriendRequestResource;
+use App\Http\Resources\V1\FriendRequestResource;
 use Symfony\Component\HttpFoundation\Response;
 use App\Exceptions\SelfFriendRequestException;
 use App\Exceptions\FriendshipAlreadyExistsException;

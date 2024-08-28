@@ -21,7 +21,7 @@ export default {
     methods: {
         async fetchUsers() {
             await axios
-                .get("/api/users")
+                .get("/api/v1/users")
                 .then((response) => {
                     this.users = response.data.data.filter(
                         (user) => user.id !== this.userStore.user.id

@@ -15,7 +15,7 @@ class PostControllerTest extends TestCase
     {
         Post::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/posts');
+        $response = $this->getJson('/api/v1/posts');
 
         $response->assertStatus(200)
             ->assertJsonCount(3, 'data')
@@ -41,7 +41,7 @@ class PostControllerTest extends TestCase
         ];
         $this->actingAs(User::factory()->create());
 
-        $response = $this->postJson('/api/posts', $data);
+        $response = $this->postJson('/api/v1/posts', $data);
 
         $response->assertStatus(201)
             ->assertJsonStructure(['data' => [
@@ -62,7 +62,7 @@ class PostControllerTest extends TestCase
         ];
         $this->actingAs(User::factory()->create());
 
-        $response = $this->postJson('/api/posts', $data);
+        $response = $this->postJson('/api/v1/posts', $data);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrorFor('content');
@@ -74,7 +74,7 @@ class PostControllerTest extends TestCase
             'content' => fake()->paragraph()
         ];
 
-        $response = $this->postJson('/api/posts', $data);
+        $response = $this->postJson('/api/v1/posts', $data);
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
@@ -86,7 +86,7 @@ class PostControllerTest extends TestCase
         $post = Post::factory()->for($user)->create();
         $this->actingAs($user);
 
-        $response = $this->deleteJson('/api/posts/' . $post->id);
+        $response = $this->deleteJson('/api/v1/posts/' . $post->id);
 
         $response->assertStatus(204);
     }
@@ -97,7 +97,7 @@ class PostControllerTest extends TestCase
         $post = Post::factory()->for(User::factory())->create();
         $this->actingAs($user);
 
-        $response = $this->deleteJson('/api/posts/' . $post->id);
+        $response = $this->deleteJson('/api/v1/posts/' . $post->id);
 
         $response->assertStatus(403);
     }
@@ -106,7 +106,7 @@ class PostControllerTest extends TestCase
     {
         $post = Post::factory()->for(User::factory())->create();
 
-        $response = $this->deleteJson('/api/posts/' . $post->id);
+        $response = $this->deleteJson('/api/v1/posts/' . $post->id);
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);

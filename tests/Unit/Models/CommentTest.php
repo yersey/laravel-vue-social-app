@@ -18,9 +18,8 @@ class CommentTest extends TestCase
         $user = User::factory()->create();
         $comment = Comment::factory()->for($user)->for(Post::factory(), 'commentable')->create();
         Like::factory()->for($user)->for($comment, 'likeable')->create();
-        $this->actingAs($user);
         
-        $result = $comment->isLikedByLoggedInUser();
+        $result = $comment->isLikedByLoggedInUser($user);
 
         $this->assertTrue($result);
     }
@@ -29,9 +28,8 @@ class CommentTest extends TestCase
     {
         $user = User::factory()->create();
         $comment = Comment::factory()->for($user)->for(Post::factory(), 'commentable')->create();
-        $this->actingAs($user);
         
-        $result = $comment->isLikedByLoggedInUser();
+        $result = $comment->isLikedByLoggedInUser($user);
 
         $this->assertFalse($result);
     }
@@ -42,7 +40,7 @@ class CommentTest extends TestCase
         $comment = Comment::factory()->for($user)->for(Post::factory(), 'commentable')->create();
         Like::factory()->for($user)->for($comment, 'likeable')->create();
         
-        $result = $comment->isLikedByLoggedInUser();
+        $result = $comment->isLikedByLoggedInUser(null);
 
         $this->assertFalse($result);
     }

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\V1\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CommentResource extends JsonResource

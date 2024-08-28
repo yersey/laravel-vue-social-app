@@ -2,18 +2,18 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\ImageController;
-use App\Http\Controllers\Api\FriendController;
-use App\Http\Controllers\Api\CommentController;
-use App\Http\Controllers\Api\PostLikeController;
-use App\Http\Controllers\Api\CommentLikeController;
-use App\Http\Controllers\Api\PostCommentController;
-use App\Http\Controllers\Api\CommentCommentController;
-use App\Http\Controllers\Api\IncomingFriendRequestController;
-use App\Http\Controllers\Api\OutgoingFriendRequestController;
+use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\PostController;
+use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\ImageController;
+use App\Http\Controllers\Api\V1\FriendController;
+use App\Http\Controllers\Api\V1\CommentController;
+use App\Http\Controllers\Api\V1\PostLikeController;
+use App\Http\Controllers\Api\V1\CommentLikeController;
+use App\Http\Controllers\Api\V1\PostCommentController;
+use App\Http\Controllers\Api\V1\CommentCommentController;
+use App\Http\Controllers\Api\V1\IncomingFriendRequestController;
+use App\Http\Controllers\Api\V1\OutgoingFriendRequestController;
 
 /*
 |--------------------------------------------------------------------------

@@ -18,7 +18,7 @@ class CommentControllerTest extends TestCase
         $comment = Comment::factory()->for(Post::factory(), 'commentable')->for($user)->create();
         $this->actingAs($user);
 
-        $response = $this->deleteJson('/api/comments/' . $comment->id);
+        $response = $this->deleteJson('/api/v1/comments/' . $comment->id);
 
         $response->assertStatus(204);
     }
@@ -28,7 +28,7 @@ class CommentControllerTest extends TestCase
         $comment = Comment::factory()->for(Post::factory(), 'commentable')->create();
         $this->actingAs(User::factory()->create());
 
-        $response = $this->deleteJson('/api/comments/' . $comment->id);
+        $response = $this->deleteJson('/api/v1/comments/' . $comment->id);
 
         $response->assertStatus(403);
     }
@@ -37,7 +37,7 @@ class CommentControllerTest extends TestCase
     {
         $comment = Comment::factory()->for(Post::factory(), 'commentable')->create();
 
-        $response = $this->deleteJson('/api/comments/' . $comment->id);
+        $response = $this->deleteJson('/api/v1/comments/' . $comment->id);
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);

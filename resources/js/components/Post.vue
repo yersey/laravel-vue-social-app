@@ -10,7 +10,7 @@ export default {
     methods: {
         async deletePost() {
             await axios
-                .delete(`/api/posts/${this.post.id}`)
+                .delete(`/api/v1/posts/${this.post.id}`)
                 .then((response) => {
                     this.$emit("postDeleted", this.post);
                 })
@@ -20,7 +20,7 @@ export default {
         },
         async likePost() {
             await axios
-                .post(`/api/posts/${this.post.id}/likes`)
+                .post(`/api/v1/posts/${this.post.id}/likes`)
                 .then((response) => {
                     this.post.likes_count++;
                     this.post.is_liked = true;
@@ -31,7 +31,7 @@ export default {
         },
         async unlikePost() {
             await axios
-                .delete(`/api/posts/${this.post.id}/likes`)
+                .delete(`/api/v1/posts/${this.post.id}/likes`)
                 .then((response) => {
                     this.post.likes_count--;
                     this.post.is_liked = false;

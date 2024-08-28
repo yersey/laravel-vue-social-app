@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
-use App\Http\Resources\CommentResource;
+use App\Http\Resources\V1\CommentResource;
 use App\DataTransferObjects\CommentDto;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -11,7 +11,7 @@ export default {
     methods: {
         async addReply() {
             await axios
-                .post(`/api/comments/${this.comment.id}/comments`, {
+                .post(`/api/v1/comments/${this.comment.id}/comments`, {
                     content: this.newReplyBody,
                 })
                 .then((response) => {

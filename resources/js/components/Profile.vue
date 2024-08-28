@@ -30,7 +30,7 @@ export default {
     methods: {
         async updateUser() {
             await axios
-                .put(`/api/users/${this.user.id}`, {
+                .put(`/api/v1/users/${this.user.id}`, {
                     name: this.user.name,
                     surname: this.user.surname,
                     date_of_birth: this.user.date_of_birth,

@@ -10,7 +10,7 @@ export default {
     methods: {
         async addComment() {
             await axios
-                .post(`/api/posts/${this.post.id}/comments`, {
+                .post(`/api/v1/posts/${this.post.id}/comments`, {
                     content: this.newCommentBody,
                 })
                 .then((response) => {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\UserResource;
-use App\Http\Resources\CommentResource;
+use App\Http\Resources\V1\UserResource;
+use App\Http\Resources\V1\CommentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource

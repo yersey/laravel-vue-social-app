@@ -18,7 +18,7 @@ class CommentLikeControllerTest extends TestCase
         $comment = Comment::factory()->for(Post::factory(), 'commentable')->create();
         $this->actingAs(User::factory()->create());
 
-        $response = $this->postJson('/api/comments/' . $comment->id . '/likes');
+        $response = $this->postJson('/api/v1/comments/' . $comment->id . '/likes');
 
         $response->assertStatus(201);
     }
@@ -30,17 +30,17 @@ class CommentLikeControllerTest extends TestCase
         Like::factory()->for($user)->for($comment, 'likeable')->create();
         $this->actingAs($user);
 
-        $response = $this->postJson('/api/comments/' . $comment->id . '/likes');
+        $response = $this->postJson('/api/v1/comments/' . $comment->id . '/likes');
 
-        $response->assertStatus(400)
-            ->assertJson(['error' => 'You have already liked this comment']);
+        $response->assertStatus(409)
+            ->assertJson(['message' => 'You have already liked this comment.']);
     }
 
     public function test_like_store_throws_authentication_error(): void
     {
         $comment = Comment::factory()->for(Post::factory(), 'commentable')->create();
 
-        $response = $this->postJson('/api/comments/' . $comment->id . '/likes');
+        $response = $this->postJson('/api/v1/comments/' . $comment->id . '/likes');
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
@@ -53,7 +53,7 @@ class CommentLikeControllerTest extends TestCase
         Like::factory()->for($user)->for($comment, 'likeable')->create();
         $this->actingAs($user);
 
-        $response = $this->deleteJson('/api/comments/' . $comment->id . '/likes');
+        $response = $this->deleteJson('/api/v1/comments/' . $comment->id . '/likes');
 
         $response->assertStatus(204);
     }
@@ -63,7 +63,7 @@ class CommentLikeControllerTest extends TestCase
         $comment = Comment::factory()->for(Post::factory(), 'commentable')->create();
         Like::factory()->for(User::factory())->for($comment, 'likeable')->create();
 
-        $response = $this->deleteJson('/api/comments/' . $comment->id . '/likes');
+        $response = $this->deleteJson('/api/v1/comments/' . $comment->id . '/likes');
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
@@ -75,10 +75,10 @@ class CommentLikeControllerTest extends TestCase
         Like::factory()->for(User::factory())->for($comment, 'likeable')->create();
         $this->actingAs(User::factory()->create());
 
-        $response = $this->deleteJson('/api/comments/' . $comment->id . '/likes');
+        $response = $this->deleteJson('/api/v1/comments/' . $comment->id . '/likes');
 
         $response->assertStatus(404)
-            ->assertJson(['error' => 'Like not found']);
+            ->assertJson(['message' => 'Like not found.']);
     }
 
 }

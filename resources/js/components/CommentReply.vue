@@ -5,7 +5,7 @@ export default {
     methods: {
         async deleteReply() {
             await axios
-                .delete(`/api/comments/${this.reply.id}`)
+                .delete(`/api/v1/comments/${this.reply.id}`)
                 .then((response) => {
                     this.$emit("replyDeleted", this.reply);
                 })
@@ -15,7 +15,7 @@ export default {
         },
         async likeReply() {
             await axios
-                .post(`/api/comments/${this.reply.id}/likes`)
+                .post(`/api/v1/comments/${this.reply.id}/likes`)
                 .then((response) => {
                     this.reply.likes_count++;
                     this.reply.is_liked = true;
@@ -26,7 +26,7 @@ export default {
         },
         async unlikeReply() {
             await axios
-                .delete(`/api/comments/${this.reply.id}/likes`)
+                .delete(`/api/v1/comments/${this.reply.id}/likes`)
                 .then((response) => {
                     this.reply.likes_count--;
                     this.reply.is_liked = false;

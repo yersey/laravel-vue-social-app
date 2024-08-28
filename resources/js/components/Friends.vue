@@ -22,7 +22,7 @@ export default {
     methods: {
         async fetchFriends() {
             await axios
-                .get(`/api/users/${this.userStore.user.id}/friends`)
+                .get(`/api/v1/users/${this.userStore.user.id}/friends`)
                 .then((response) => {
                     this.friends = response.data.data;
                 })

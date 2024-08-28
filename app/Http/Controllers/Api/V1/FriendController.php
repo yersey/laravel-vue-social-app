@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\FriendService;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\V1\UserResource;
 use App\Http\Controllers\Controller;
 use App\Exceptions\FriendNotFoundException;
 use Symfony\Component\HttpFoundation\Response;

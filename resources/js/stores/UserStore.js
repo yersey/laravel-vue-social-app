@@ -13,7 +13,7 @@ export const useUserStore = defineStore('userStore', {
             }
         },
         async login(email, password) {
-            await axios.post('/api/login', { email: email, password: password })
+            await axios.post('/api/v1/login', { email: email, password: password })
                 .then(response => {
                     this.token = response.data.token;
                     this.isAuthenticated = true;
@@ -24,7 +24,7 @@ export const useUserStore = defineStore('userStore', {
                 });
         },
         async logout() {
-            await axios.post('/api/logout')
+            await axios.post('/api/v1/logout')
                 .then(response => {
                     this.token = null;
                     this.isAuthenticated = false;
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('userStore', {
                 });
         },
         async getUser() {
-            await axios.get('/api/user')
+            await axios.get('/api/v1/user')
                 .then(response => {
                     this.user = response.data.data
                 }).catch(error => {

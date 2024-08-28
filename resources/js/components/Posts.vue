@@ -20,7 +20,7 @@ export default {
     methods: {
         async fetchPosts() {
             await axios
-                .get("/api/posts")
+                .get("/api/v1/posts")
                 .then((response) => (this.posts = response.data.data))
                 .catch((error) => {
                     console.error(error);

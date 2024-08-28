@@ -20,7 +20,7 @@ class CommentCommentControllerTest extends TestCase
             'content' => fake()->paragraph()
         ];
 
-        $response = $this->postJson('/api/comments/' . $comment->id . '/comments', $data);
+        $response = $this->postJson('/api/v1/comments/' . $comment->id . '/comments', $data);
 
         $response->assertStatus(201)
             ->assertJsonStructure([
@@ -45,10 +45,10 @@ class CommentCommentControllerTest extends TestCase
             'content' => fake()->paragraph()
         ];
 
-        $response = $this->postJson('/api/comments/' . $reply->id . '/comments', $data);
+        $response = $this->postJson('/api/v1/comments/' . $reply->id . '/comments', $data);
 
         $response->assertStatus(400)
-            ->assertJson(['error' => 'You can\'t reply to this comment']);
+            ->assertJson(['message' => 'Replying to this comment is not allowed.']);
     }
 
     public function test_comment_validation_throws_error(): void
@@ -59,7 +59,7 @@ class CommentCommentControllerTest extends TestCase
             'content' => '1'
         ];
 
-        $response = $this->postJson('/api/comments/' . $comment->id . '/comments', $data);
+        $response = $this->postJson('/api/v1/comments/' . $comment->id . '/comments', $data);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrorFor('content');
@@ -72,7 +72,7 @@ class CommentCommentControllerTest extends TestCase
             'content' => fake()->paragraph()
         ];
 
-        $response = $this->postJson('/api/comments/' . $comment->id . '/comments', $data);
+        $response = $this->postJson('/api/v1/comments/' . $comment->id . '/comments', $data);
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);

@@ -19,7 +19,7 @@ class PostCommentControllerTest extends TestCase
         ];
         $this->actingAs(User::factory()->create());
 
-        $response = $this->postJson('/api/posts/' . $post->id . '/comments', $data);
+        $response = $this->postJson('/api/v1/posts/' . $post->id . '/comments', $data);
 
         $response->assertStatus(201)
             ->assertJsonStructure(['data' => [
@@ -41,7 +41,7 @@ class PostCommentControllerTest extends TestCase
         ];
         $this->actingAs(User::factory()->create());
 
-        $response = $this->postJson('/api/posts/' . $post->id . '/comments', $data);
+        $response = $this->postJson('/api/v1/posts/' . $post->id . '/comments', $data);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrorFor('content');
@@ -54,7 +54,7 @@ class PostCommentControllerTest extends TestCase
             'content' => fake()->paragraph()
         ];
 
-        $response = $this->postJson('/api/posts/' . $post->id . '/comments', $data);
+        $response = $this->postJson('/api/v1/posts/' . $post->id . '/comments', $data);
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);

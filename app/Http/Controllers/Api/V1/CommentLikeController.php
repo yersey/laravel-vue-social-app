@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
-use App\Services\PostService;
+use App\Services\CommentService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\LikeResource;
+use App\Http\Resources\V1\LikeResource;
 use App\Exceptions\LikeNotFoundException;
-use App\Exceptions\PostAlreadyLikedException;
 use Symfony\Component\HttpFoundation\Response;
+use App\Exceptions\CommentAlreadyLikedException;
 
-class PostLikeController extends Controller
+class CommentLikeController extends Controller
 {
     public function __construct(
-        protected PostService $service
+        protected CommentService $service
     ) {}
-
-    public function store(Request $request, Post $post): JsonResponse
+    
+    public function store(Request $request, Comment $comment): JsonResponse
     {
         try {
-            $like = $this->service->like($post, $request->user());
-        } catch (PostAlreadyLikedException $e) {
+            $like = $this->service->like($comment, $request->user());
+        } catch (CommentAlreadyLikedException $e) {
             return response()
                 ->json(['message' => $e->getMessage()])
                 ->setStatusCode(Response::HTTP_CONFLICT);
@@ -33,10 +33,10 @@ class PostLikeController extends Controller
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function destroy(Request $request, Post $post): JsonResponse
+    public function destroy(Request $request, Comment $comment): JsonResponse
     {
         try {
-            $this->service->unlike($post, $request->user());
+            $this->service->unlike($comment, $request->user());
         } catch (LikeNotFoundException $e) {
             return response()
                 ->json(['message' => $e->getMessage()])
