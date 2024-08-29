@@ -5,14 +5,17 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Auth\Events\Logout;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\UserResource;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\V1\UserResource;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class AuthController extends Controller
 {
     public function __construct(
-        protected AuthManager $auth
+        protected AuthManager $auth,
+        protected Dispatcher $dispatcher
     ) {}
 
     public function register(RegisterRequest $request)
@@ -37,6 +40,8 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
+
+        $this->dispatcher->dispatch(new Logout('api', $request->user()));
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
