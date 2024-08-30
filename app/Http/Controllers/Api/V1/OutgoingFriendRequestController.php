@@ -9,11 +9,8 @@ use App\Services\FriendService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\FriendRequestResource;
 use Symfony\Component\HttpFoundation\Response;
-use App\Exceptions\SelfFriendRequestException;
-use App\Exceptions\FriendshipAlreadyExistsException;
-use App\Exceptions\FriendRequestAlreadyExistsException;
+use App\Http\Resources\V1\FriendRequestResource;
 
 class OutgoingFriendRequestController extends Controller
 {
@@ -23,21 +20,7 @@ class OutgoingFriendRequestController extends Controller
     
     function store(Request $request, User $receiver): JsonResponse
     {
-        try {
-            $friendRequest = $this->service->sendFriendRequest($receiver, $request->user());
-        } catch (SelfFriendRequestException $e) {
-            return response()
-                ->json(['message' => $e->getMessage()])
-                ->setStatusCode(Response::HTTP_BAD_REQUEST);
-        } catch (FriendshipAlreadyExistsException $e) {
-            return response()
-                ->json(['message' => $e->getMessage()])
-                ->setStatusCode(Response::HTTP_CONFLICT);
-        } catch (FriendRequestAlreadyExistsException $e) {
-            return response()
-                ->json(['message' => $e->getMessage()])
-                ->setStatusCode(Response::HTTP_CONFLICT);
-        }
+        $friendRequest = $this->service->sendFriendRequest($receiver, $request->user());
 
         return FriendRequestResource::make($friendRequest)
             ->response()

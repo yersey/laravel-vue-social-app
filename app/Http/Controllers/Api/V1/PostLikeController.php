@@ -8,8 +8,6 @@ use App\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\LikeResource;
-use App\Exceptions\LikeNotFoundException;
-use App\Exceptions\PostAlreadyLikedException;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostLikeController extends Controller
@@ -20,13 +18,7 @@ class PostLikeController extends Controller
 
     public function store(Request $request, Post $post): JsonResponse
     {
-        try {
-            $like = $this->service->like($post, $request->user());
-        } catch (PostAlreadyLikedException $e) {
-            return response()
-                ->json(['message' => $e->getMessage()])
-                ->setStatusCode(Response::HTTP_CONFLICT);
-        }
+        $like = $this->service->like($post, $request->user());
 
         return LikeResource::make($like)
             ->response()
@@ -35,13 +27,7 @@ class PostLikeController extends Controller
 
     public function destroy(Request $request, Post $post): JsonResponse
     {
-        try {
-            $this->service->unlike($post, $request->user());
-        } catch (LikeNotFoundException $e) {
-            return response()
-                ->json(['message' => $e->getMessage()])
-                ->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
+        $this->service->unlike($post, $request->user());
 
         return response()
             ->json()

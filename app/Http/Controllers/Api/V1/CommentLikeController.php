@@ -8,9 +8,7 @@ use App\Services\CommentService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\LikeResource;
-use App\Exceptions\LikeNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use App\Exceptions\CommentAlreadyLikedException;
 
 class CommentLikeController extends Controller
 {
@@ -20,13 +18,7 @@ class CommentLikeController extends Controller
     
     public function store(Request $request, Comment $comment): JsonResponse
     {
-        try {
-            $like = $this->service->like($comment, $request->user());
-        } catch (CommentAlreadyLikedException $e) {
-            return response()
-                ->json(['message' => $e->getMessage()])
-                ->setStatusCode(Response::HTTP_CONFLICT);
-        }
+        $like = $this->service->like($comment, $request->user());
 
         return LikeResource::make($like)
             ->response()
@@ -35,13 +27,7 @@ class CommentLikeController extends Controller
 
     public function destroy(Request $request, Comment $comment): JsonResponse
     {
-        try {
-            $this->service->unlike($comment, $request->user());
-        } catch (LikeNotFoundException $e) {
-            return response()
-                ->json(['message' => $e->getMessage()])
-                ->setStatusCode(Response::HTTP_NOT_FOUND);
-        }
+        $this->service->unlike($comment, $request->user());
 
         return response()
             ->json()
