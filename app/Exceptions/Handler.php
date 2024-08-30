@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Contracts\HttpExceptionInterface;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -23,7 +24,7 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->renderable(function (Exception $e) {
+        $this->renderable(function (HttpExceptionInterface $e) {
             return response()
                 ->json(['message' => $e->getMessage()])
                 ->setStatusCode($e->getCode());

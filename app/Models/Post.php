@@ -6,26 +6,17 @@ use App\Models\Like;
 use App\Models\User;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
+use App\Contracts\LikeableModelInterface;
+use App\Contracts\CommentableModelInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Post extends Model
+class Post extends Model implements LikeableModelInterface, CommentableModelInterface
 {
     use HasFactory;
 
     protected $guarded = [];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($post) {
-            $post->comments->map->delete();
-            //won't fire events
-            $post->likes()->delete();
-        });
-    }
 
     public function user(): BelongsTo
     {
