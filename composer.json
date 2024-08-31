@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "opcodesio/log-viewer": "^3.11",
+        "predis/predis": "^2.2",
         "sentry/sentry-laravel": "^4.8"
     },
     "require-dev": {
