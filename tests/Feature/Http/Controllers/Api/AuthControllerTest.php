@@ -16,7 +16,7 @@ class AuthControllerTest extends TestCase
         $data = [
             'name' => fake()->name(),
             'email' => fake()->email(),
-            'password' => fake()->password(),
+            'password' => fake()->password(8),
         ];
 
         $response = $this->postJson('/api/v1/register', $data);
@@ -36,7 +36,7 @@ class AuthControllerTest extends TestCase
         $data = [
             'name' => fake()->name(),
             'email' => 'test@test.',
-            'password' => fake()->password(),
+            'password' => fake()->password(8),
         ];
 
         $response = $this->postJson('/api/v1/register', $data);

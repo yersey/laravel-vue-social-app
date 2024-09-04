@@ -13,7 +13,7 @@ class ImageController extends Controller
     public function store(ImageRequest $request): JsonResponse
     {
         $image = $request->safe()->image;
-        $path = 'public/' . $image->store('images', 'public');
+        $path = $image->store('images');
 
         return ImageResource::make(['image' => $path])
             ->response()

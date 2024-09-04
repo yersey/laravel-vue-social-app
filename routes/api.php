@@ -54,13 +54,13 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::patch('/friend-requests/{friendRequest}', [IncomingFriendRequestController::class, 'update']);
     Route::delete('/friend-requests/{friendRequest}', [IncomingFriendRequestController::class, 'destroy']);
 
-    Route::get('/users/{user}/friends', [FriendController::class, 'index']);
     Route::delete('/users/{user}/friends/{friend}', [FriendController::class, 'destroy']);
 });
 
 Route::middleware('set_user_if_authenticated')->group(function() {
     Route::get('/posts', [PostController::class, 'index']);
     Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/{user}/friends', [FriendController::class, 'index']);
 });
 
 Route::middleware('auth:sanctum')->group(function() {
