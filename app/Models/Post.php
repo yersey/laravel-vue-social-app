@@ -33,7 +33,7 @@ class Post extends Model implements LikeableModelInterface, CommentableModelInte
         return $this->morphMany(Like::class, 'likeable');
     }
 
-    public function isLikedByLoggedInUser(?User $user): bool
+    public function isLikedByUser(?User $user): bool
     {
         if (!$user) {
             return false;

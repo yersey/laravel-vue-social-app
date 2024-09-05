@@ -38,7 +38,7 @@ class Comment extends Model implements LikeableModelInterface, CommentableModelI
         return $this->morphMany(Like::class, 'likeable');
     }
 
-    public function isLikedByLoggedInUser(?User $user): bool
+    public function isLikedByUser(?User $user): bool
     {
         if (!$user) {
             return false;

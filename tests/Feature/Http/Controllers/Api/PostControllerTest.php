@@ -80,6 +80,50 @@ class PostControllerTest extends TestCase
             ->assertJson(['message' => 'Unauthenticated.']);
     }
 
+    public function test_post_is_updated_successfully(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $post = Post::factory()->for($user)->create();
+        $data = ['content' => fake()->paragraph()];
+        
+        $response = $this->putJson('/api/v1/posts/' . $post->id, $data);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['data' => [
+                'id',
+                'content',
+                'user',
+                'created_at',
+                'comments',
+                'likes_count',
+                'is_liked',
+            ]]);
+    }
+
+    public function test_unauthenticated_post_update_throws_error(): void
+    {
+        $post = Post::factory()->create();
+        $data = ['content' => fake()->paragraph()];
+        
+        $response = $this->putJson('/api/v1/posts/' . $post->id, $data);
+
+        $response->assertStatus(401)
+            ->assertJson(['message' => 'Unauthenticated.']);
+    }
+
+    public function test_unauthorized_post_update_throws_error(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $post = Post::factory()->create();
+        $data = ['content' => fake()->paragraph()];
+        
+        $response = $this->putJson('/api/v1/posts/' . $post->id, $data);
+
+       $response->assertStatus(403);
+    }
+
     public function test_post_is_deleted_successfully(): void
     {
         $user = User::factory()->create();

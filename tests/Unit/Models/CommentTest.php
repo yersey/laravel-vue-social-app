@@ -19,7 +19,7 @@ class CommentTest extends TestCase
         $comment = Comment::factory()->for($user)->for(Post::factory(), 'commentable')->create();
         Like::factory()->for($user)->for($comment, 'likeable')->create();
         
-        $result = $comment->isLikedByLoggedInUser($user);
+        $result = $comment->isLikedByUser($user);
 
         $this->assertTrue($result);
     }
@@ -29,7 +29,7 @@ class CommentTest extends TestCase
         $user = User::factory()->create();
         $comment = Comment::factory()->for($user)->for(Post::factory(), 'commentable')->create();
         
-        $result = $comment->isLikedByLoggedInUser($user);
+        $result = $comment->isLikedByUser($user);
 
         $this->assertFalse($result);
     }
@@ -40,7 +40,7 @@ class CommentTest extends TestCase
         $comment = Comment::factory()->for($user)->for(Post::factory(), 'commentable')->create();
         Like::factory()->for($user)->for($comment, 'likeable')->create();
         
-        $result = $comment->isLikedByLoggedInUser(null);
+        $result = $comment->isLikedByUser(null);
 
         $this->assertFalse($result);
     }
@@ -62,5 +62,17 @@ class CommentTest extends TestCase
         $result = $comment->isCommentReply();
 
         $this->assertFalse($result);
+    }
+
+    public function test_comment_deletion_deletes_related_models(): void
+    {
+        $comment = Comment::factory()->for(Post::factory(), 'commentable')->create();
+        $like = Like::factory()->for($comment, 'likeable')->create();
+        $reply = Comment::factory()->for($comment, 'commentable')->create();
+
+        $comment->delete();
+
+        $this->assertNull($like->fresh());
+        $this->assertNull($reply->fresh());
     }
 }
