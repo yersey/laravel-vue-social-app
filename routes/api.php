@@ -35,44 +35,44 @@ Route::get('/ping', function (Request $request) {
     return 'pong';
 });
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    Route::post('/images', [ImageController::class, 'store']);
+    Route::post('/images', [ImageController::class, 'store'])->name('images.store');
 
-    Route::get('/user', [UserController::class, 'me']);
-    Route::get('/users/{user}', [UserController::class, 'show']);
-    Route::put('/users/{user}', [UserController::class, 'update']);
+    Route::get('/user', [UserController::class, 'me'])->name('users.me');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
-    Route::post('/users/{receiver}/friend-requests', [OutgoingFriendRequestController::class, 'store']);
-    Route::delete('/users/{receiver}/friend-requests/{friendRequest}', [OutgoingFriendRequestController::class, 'destroy']);
+    Route::post('/users/{receiver}/friend-requests', [OutgoingFriendRequestController::class, 'store'])->name('outgoing-friend-requests.store');
+    Route::delete('/users/{receiver}/friend-requests/{friendRequest}', [OutgoingFriendRequestController::class, 'destroy'])->name('outgoing-friend-requests.destroy');
     
-    Route::get('/friend-requests', [IncomingFriendRequestController::class, 'index']);
-    Route::patch('/friend-requests/{friendRequest}', [IncomingFriendRequestController::class, 'update']);
-    Route::delete('/friend-requests/{friendRequest}', [IncomingFriendRequestController::class, 'destroy']);
+    Route::get('/friend-requests', [IncomingFriendRequestController::class, 'index'])->name('friend-requests.index');
+    Route::patch('/friend-requests/{friendRequest}', [IncomingFriendRequestController::class, 'update'])->name('friend-requests.update');
+    Route::delete('/friend-requests/{friendRequest}', [IncomingFriendRequestController::class, 'destroy'])->name('friend-requests.destroy');
 
-    Route::delete('/users/{user}/friends/{friend}', [FriendController::class, 'destroy']);
+    Route::delete('/users/{user}/friends/{friend}', [FriendController::class, 'destroy'])->name('friends.destroy');
 });
 
 Route::middleware('set_user_if_authenticated')->group(function() {
-    Route::get('/posts', [PostController::class, 'index']);
-    Route::get('/users', [UserController::class, 'index']);
-    Route::get('/users/{user}/friends', [FriendController::class, 'index']);
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}/friends', [FriendController::class, 'index'])->name('friends.index');
 });
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::post('/posts', [PostController::class, 'store']);
-    Route::put('/posts/{post}', [PostController::class, 'update']);
-    Route::delete('/posts/{post}', [PostController::class, 'destroy']);
-    Route::post('/posts/{post}/comments', [PostCommentController::class, 'store']);
-    Route::post('/posts/{post}/likes', [PostLikeController::class, 'store']);
-    Route::delete('/posts/{post}/likes', [PostLikeController::class, 'destroy']);
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::post('/posts/{post}/comments', [PostCommentController::class, 'store'])->name('post-comments.store');
+    Route::post('/posts/{post}/likes', [PostLikeController::class, 'store'])->name('post-likes.store');
+    Route::delete('/posts/{post}/likes', [PostLikeController::class, 'destroy'])->name('post-likes.destroy');
 
-    Route::post('/comments/{comment}/comments', [CommentCommentController::class, 'store']);
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
-    Route::post('/comments/{comment}/likes', [CommentLikeController::class, 'store']);
-    Route::delete('/comments/{comment}/likes', [CommentLikeController::class, 'destroy']);
+    Route::post('/comments/{comment}/comments', [CommentCommentController::class, 'store'])->name('comment-comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comment-comments.destroy');
+    Route::post('/comments/{comment}/likes', [CommentLikeController::class, 'store'])->name('comment-likes.store');
+    Route::delete('/comments/{comment}/likes', [CommentLikeController::class, 'destroy'])->name('comment-likes.destroy');
 });
