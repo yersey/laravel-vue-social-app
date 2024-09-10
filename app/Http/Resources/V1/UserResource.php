@@ -2,12 +2,16 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Hateoas\UserHateoas;
 use Illuminate\Http\Request;
+use App\Traits\HateoasResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
+    use HateoasResource;
+    
     /**
      * Transform the resource into an array.
      *
@@ -15,6 +19,8 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $hateoas = new UserHateoas($this->resource, $request->user());
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -25,15 +31,7 @@ class UserResource extends JsonResource
             'is_friend' => $this->when($request->user() && $this->friendsLoaded(), function () use ($request) {
                 return $this->isFriendWith($request->user());
             }),
-            'friend_request' => $this->when($request->user() && $this->friendRequestRelationsLoaded(), function () use ($request) {
-                if ($friendRequest = $this->getFriendRequestWith($request->user())) {
-                    return [
-                        'id' => $friendRequest->id,
-                        'sender_id' => $friendRequest->sender_id,
-                        'receiver_id' => $friendRequest->receiver_id
-                    ];
-                }
-            })
+            '_links' => $this->links($hateoas)
         ];
     }
 }

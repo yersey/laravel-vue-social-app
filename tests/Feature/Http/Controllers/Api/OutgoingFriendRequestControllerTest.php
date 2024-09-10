@@ -80,7 +80,7 @@ class OutgoingFriendRequestControllerTest extends TestCase
             'receiver_id' => $this->otherUser->id
         ]);
 
-        $response = $this->deleteJson('/api/v1/users/' . $this->otherUser->id . '/friend-requests/' . $friendRequest->id);
+        $response = $this->deleteJson('/api/v1/users/' . $this->otherUser->id . '/friend-requests');
 
         $response->assertStatus(204);
         $this->assertNull($friendRequest->fresh());
@@ -89,11 +89,8 @@ class OutgoingFriendRequestControllerTest extends TestCase
     public function test_unauthenticated_friend_request_deletion_throws_error(): void
     {
         $this->otherUser = User::factory()->create();
-        $friendRequest = $this->user->sentFriendRequests()->create([
-            'receiver_id' => $this->otherUser->id
-        ]);
 
-        $response = $this->deleteJson('/api/v1/users/' . $this->otherUser->id . '/friend-requests/' . $friendRequest->id);
+        $response = $this->deleteJson('/api/v1/users/' . $this->otherUser->id . '/friend-requests');
 
         $response->assertStatus(401)
             ->assertJson([
@@ -101,16 +98,14 @@ class OutgoingFriendRequestControllerTest extends TestCase
             ]);
     }
 
-    public function test_unauthorized_friend_request_deletion_throws_error(): void
+    public function test_friend_request_deletion_throws_not_found_error(): void
     {
         $this->actingAs(User::factory()->create());
         $this->otherUser = User::factory()->create();
-        $friendRequest = $this->user->sentFriendRequests()->create([
-            'receiver_id' => $this->otherUser->id
-        ]);
 
-        $response = $this->deleteJson('/api/v1/users/' . $this->otherUser->id . '/friend-requests/' . $friendRequest->id);
+        $response = $this->deleteJson('/api/v1/users/' . $this->otherUser->id . '/friend-requests');
 
-        $response->assertStatus(403);
+        $response->assertStatus(404)
+            ->assertJson(['message' => 'Friend request not found.']);
     }
 }

@@ -29,6 +29,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('update-user', function (User $user, User $targetUser) {
+            return $user->id === $targetUser->id;
+        });
+
         Gate::define('update-post', function (User $user, Post $post) {
             return $user->id === $post->user_id;
         });
@@ -42,10 +46,6 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('respond-friend-request', function (User $user, FriendRequest $friendRequest) {
             return $user->id === $friendRequest->receiver_id;
-        });
-
-        Gate::define('cancel-friend-request', function (User $user, FriendRequest $friendRequest) {
-            return $user->id === $friendRequest->sender_id;
         });
     }
 }

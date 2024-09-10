@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Requests\UpdateUserRequest;
@@ -37,10 +38,9 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user): UserResource
     {
-        if ($user->id !== $request->user()->id)  {
-            return response(null, 403);
-        }
+        Gate::authorize('update-user', $user);
 
+        //TODO service
         $user->name = $request->safe()->name;
         $user->surname = $request->safe()->surname;
         $user->date_of_birth = $request->safe()->date_of_birth;

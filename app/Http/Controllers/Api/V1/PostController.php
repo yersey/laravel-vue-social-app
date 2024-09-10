@@ -33,6 +33,11 @@ class PostController extends Controller
         return PostResource::collection($posts);
     }
 
+    public function show(Post $post): PostResource
+    {
+        return PostResource::make($post);
+    }
+
     public function store(PostRequest $request): JsonResponse
     {
         $post = $this->service->store(

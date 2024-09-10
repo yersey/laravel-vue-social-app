@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\FriendRequest;
 use App\Exceptions\FriendNotFoundException;
 use App\Exceptions\SelfFriendRequestException;
+use App\Exceptions\FriendRequestNotFoundException;
 use App\Exceptions\FriendshipAlreadyExistsException;
 use App\Exceptions\FriendRequestAlreadyExistsException;
 
@@ -66,8 +67,14 @@ class FriendService
         return $friendRequest;
     }
 
-    public function cancelFriendRequest(FriendRequest $friendRequest): void
+    public function cancelFriendRequest(User $receiver, User $user): void
     {
+        $friendRequest = $user->sentFriendRequests()->where('receiver_id', $receiver->id)->first();
+
+        if (!$friendRequest) {
+            throw new FriendRequestNotFoundException();
+        }
+
         $friendRequest->delete();
     }
 }
