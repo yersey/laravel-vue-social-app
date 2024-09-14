@@ -1,0 +1,12 @@
+/public/build
+
+/storage/app/public/*
+/storage/app/debugbar/*
+/storage/app/logs/*
+/storage/app/framework/cache/data/*
+/storage/app/framework/testing/*
+/storage/app/framework/views/*
+
+/node_modules
+/vendor
+/.vscode
