@@ -28,7 +28,7 @@ class PostController extends Controller
             'comments.likes',
             'comments.comments.likes',
             'comments.comments.user'
-        ])->get();
+        ])->orderBy('id')->cursorPaginate(2);
 
         return PostResource::collection($posts);
     }

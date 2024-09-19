@@ -12,19 +12,29 @@ export default {
     data() {
         return {
             posts: [],
+            isLoading: false,
+            nextCursor: null,
         };
     },
     mounted() {
         this.fetchPosts();
+        window.addEventListener('mousewheel', this.handleScroll);
     },
     methods: {
         async fetchPosts() {
+            this.isLoading = true;
+
             await axios
-                .get("/api/v1/posts")
-                .then((response) => (this.posts = response.data.data))
+                .get(`/api/v1/posts/?cursor=${this.nextCursor}`)
+                .then((response) => {
+                    this.posts.push(...response.data.data)
+                    this.nextCursor = response.data.meta.next_cursor;
+                })
                 .catch((error) => {
                     console.error(error);
                 });
+
+            this.isLoading = false;
         },
         handlePostAdded(newPost) {
             this.posts.push(newPost);
@@ -38,7 +48,19 @@ export default {
                 this.posts.splice(index, 1);
             }
         },
+        handleScroll() {
+            if (
+                window.innerHeight + window.scrollY >= document.body.offsetHeight - 1
+                && !this.isLoading
+                && this.nextCursor
+            ) {
+                this.fetchPosts();
+            }
+        },
     },
+    beforeUnmount() {
+        window.removeEventListener('mousewheel', this.handleScroll);
+    }
 };
 </script>
 
@@ -52,6 +74,14 @@ export default {
                 :key="post.id"
                 @postDeleted="handlePostDeleted"
             />
+
+            <div v-if="isLoading" class="ajax-load text-center">
+                <v-progress-circular
+                    :size="50"
+                    color="primary"
+                    indeterminate
+                ></v-progress-circular>
+            </div>
         </v-col>
         <v-col cols="3">
             <users />
